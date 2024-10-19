@@ -2,7 +2,7 @@
 
 This repository is an example of how to setup a C project.
 
-## Compiling
+## Build
 
 ### Development
 
@@ -20,15 +20,23 @@ Compile the code for release with...
 $ make release
 ```
 
-## Executing
+## Run
 
-Execute the binary from the project root with...
+Run the binary from the project root with...
 
 ```bash
 $ ./bin/main
 ```
 
-## Cleaning Build Files
+## Test
+
+Run the tests with...
+
+```bash
+$ make test
+```
+
+## Clean
 
 Clean old build files with...
 
