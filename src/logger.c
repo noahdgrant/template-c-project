@@ -11,6 +11,9 @@ static LogLevel m_logger_level = INFO;
 static const char* logger_level_to_string(LogLevel level) {
     const char* level_str;
     switch (level) {
+        case TRACE:
+            level_str = "TRACE";
+            break;
         case DEBUG:
             level_str = "DEBUG";
             break;
@@ -23,6 +26,9 @@ static const char* logger_level_to_string(LogLevel level) {
         case ERROR:
             level_str = "ERROR";
             break;
+        case FATAL:
+            level_str = "FATAL";
+            break;
         default:
             logger(FATAL, __func__, "Unknown logger level: %d", level);
             exit(1);
@@ -32,8 +38,10 @@ static const char* logger_level_to_string(LogLevel level) {
 }
 
 LogLevel logger_level_from_string(const char* level_str) {
-    LogLevel level = ERROR;
-    if (strcmp(level_str, "DEBUG") == 0) {
+    LogLevel level = FATAL;
+    if (strcmp(level_str, "TRACE") == 0) {
+        level = TRACE;
+    } else if (strcmp(level_str, "DEBUG") == 0) {
         level = DEBUG;
     } else if (strcmp(level_str, "INFO") == 0) {
         level = INFO;
@@ -41,8 +49,10 @@ LogLevel logger_level_from_string(const char* level_str) {
         level = WARNING;
     } else if (strcmp(level_str, "ERROR") == 0) {
         level = ERROR;
+    } else if (strcmp(level_str, "FATAL") == 0) {
+        level = FATAL;
     } else {
-        logger(FATAL, __func__, "Unknown logger level: %s", level);
+        logger(FATAL, __func__, "Unknown logger level: %s", level_str);
         exit(1);
     }
     return level;
@@ -64,7 +74,7 @@ void logger(LogLevel level, const char* function_name, const char *message, ...)
     strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", localtime(&now));
     const char *level_str = logger_level_to_string(level);
 
-    fprintf(stderr, "%s | %s | %s: ", time_str, level_str, function_name);
+    fprintf(stderr, "%s | %s | %s | ", time_str, level_str, function_name);
 
     va_list args;
     va_start(args, message);
